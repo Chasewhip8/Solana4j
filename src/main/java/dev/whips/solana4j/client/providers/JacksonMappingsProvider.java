@@ -1,4 +1,4 @@
-package dev.whips.solana4j.data.providers;
+package dev.whips.solana4j.client.providers;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;

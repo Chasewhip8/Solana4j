@@ -1,4 +1,4 @@
-package dev.whips.solana4j.data;
+package dev.whips.solana4j.client.data;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.github.novacrypto.base58.Base58;

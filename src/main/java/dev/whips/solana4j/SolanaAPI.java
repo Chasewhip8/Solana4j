@@ -7,8 +7,8 @@ import dev.whips.solana4j.client.data.AccountInfo;
 import dev.whips.solana4j.client.data.config.GeneralConfig;
 import dev.whips.solana4j.client.data.enums.RPCEncoding;
 import dev.whips.solana4j.client.data.results.ContextResult;
-import dev.whips.solana4j.client.exceptions.RPCException;
-import dev.whips.solana4j.data.PubKey;
+import dev.whips.solana4j.exceptions.RPCException;
+import dev.whips.solana4j.client.data.PubKey;
 
 public class SolanaAPI {
     private final SolanaCluster cluster;
@@ -46,5 +46,6 @@ public class SolanaAPI {
     }
 
     public void getBlock(){
+
     }
 }

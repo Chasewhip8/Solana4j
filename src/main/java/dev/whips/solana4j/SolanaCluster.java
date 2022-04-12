@@ -6,7 +6,8 @@ import java.net.URL;
 public enum SolanaCluster {
     MAINNET_BETA("https://api.mainnet-beta.solana.com"),
     TESTNET("https://api.testnet.solana.com"),
-    DEVNET("https://api.devnet.solana.com");
+    DEVNET("https://api.devnet.solana.com"),
+    GENESYS_GO_MAINNET("https://ssc-dao.genesysgo.net/");
 
     URL endpoint;
 

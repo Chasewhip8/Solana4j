@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.io.BaseEncoding;
 import com.google.common.primitives.UnsignedLong;
 import dev.whips.solana4j.client.data.enums.RPCEncoding;
-import dev.whips.solana4j.client.exceptions.ContractException;
+import dev.whips.solana4j.exceptions.ContractException;
 import dev.whips.solana4j.utils.DataReader;
 import io.github.novacrypto.base58.Base58;
 
@@ -50,7 +50,7 @@ public class AccountInfo {
     }
 
     @JsonIgnore
-    public DataReader getDataReader(){
+    public DataReader getDataReader() throws ContractException {
         if (data.size() != 2){
             throw new ContractException("Contract data was missing or non existent");
         }

@@ -1,13 +1,19 @@
-package dev.whips.solana4j.programs;
+package dev.whips.solana4j.programs.layout;
 
 import com.google.common.primitives.UnsignedLong;
-import dev.whips.solana4j.client.exceptions.ContractException;
-import dev.whips.solana4j.data.PubKey;
+import dev.whips.solana4j.SolanaAPI;
+import dev.whips.solana4j.client.data.AccountInfo;
+import dev.whips.solana4j.client.data.enums.RPCEncoding;
+import dev.whips.solana4j.exceptions.ContractException;
+import dev.whips.solana4j.exceptions.RPCException;
+import dev.whips.solana4j.client.data.PubKey;
+import dev.whips.solana4j.programs.BaseProgram;
 import dev.whips.solana4j.utils.DataReader;
+import dev.whips.solana4j.utils.NumberUtils;
 
 import java.math.BigInteger;
 
-public class RaydiumAMMV4 {
+public class RaydiumAMMV4 extends BaseProgram {
     private final UnsignedLong status;
     private final UnsignedLong nonce;
     private final UnsignedLong max_order;
@@ -71,10 +77,15 @@ public class RaydiumAMMV4 {
     private final PubKey owner;
     private final PubKey pnl_owner;
 
-    public RaydiumAMMV4(DataReader dataReader) {
-        if (dataReader.getRemainingBytes() != 752){
-            throw new ContractException("Invalid Raydium AMM V4 structure size");
-        }
+    private final SolanaAPI api;
+
+    public RaydiumAMMV4(SolanaAPI api, PubKey pubKey) throws RPCException, ContractException {
+        this.api = api;
+
+        AccountInfo accountInfo = api.getAccountInfo(pubKey, RPCEncoding.BASE64);
+        DataReader dataReader = accountInfo.getDataReader();
+
+        checkProgramSize(dataReader, 752);
         
         this.status = dataReader.readU64();
         this.nonce = dataReader.readU64();
@@ -125,6 +136,27 @@ public class RaydiumAMMV4 {
         this.lp_vault = dataReader.readPubKey();
         this.owner = dataReader.readPubKey();
         this.pnl_owner = dataReader.readPubKey();
+    }
+
+    public double requestCurrentPrice() throws RPCException, ContractException {
+        int baseDecimals = getBase_decimal().intValue();
+        int quoteDecimals = getQuote_decimal().intValue();
+
+        double base = NumberUtils.toDecimal(new SPLTokenAccount(
+                api.getAccountInfo(getBase_vault(), RPCEncoding.BASE64).getDataReader()
+        ).getAmount().longValue(), baseDecimals);
+        double quote = NumberUtils.toDecimal(new SPLTokenAccount(
+                api.getAccountInfo(getQuote_vault(), RPCEncoding.BASE64).getDataReader()
+        ).getAmount().longValue(), quoteDecimals);
+
+        SerumOpenOrdersV2 serumOpenOrders = new SerumOpenOrdersV2(api.getAccountInfo(getOpen_orders(), RPCEncoding.BASE64).getDataReader());
+
+        double baseTotal = base + NumberUtils.toDecimal(serumOpenOrders.getBaseTokenTotal().longValue(), baseDecimals)
+                - NumberUtils.toDecimal(getBase_need_take_pnl().longValue(), baseDecimals);
+        double quoteTotal = quote + NumberUtils.toDecimal(serumOpenOrders.getQuoteTokenTotal().longValue(), quoteDecimals)
+                - NumberUtils.toDecimal(getQuote_need_take_pnl().longValue(), quoteDecimals);
+
+        return quoteTotal / baseTotal;
     }
 
     public UnsignedLong getStatus() {

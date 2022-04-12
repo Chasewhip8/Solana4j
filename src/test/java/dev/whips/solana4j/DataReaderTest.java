@@ -1,6 +1,6 @@
 package dev.whips.solana4j;
 
-import dev.whips.solana4j.data.PubKey;
+import dev.whips.solana4j.client.data.PubKey;
 import dev.whips.solana4j.utils.DataReadException;
 import dev.whips.solana4j.utils.DataReader;
 import org.junit.jupiter.api.Test;

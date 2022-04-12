@@ -1,4 +1,4 @@
-package dev.whips.solana4j.client.exceptions;
+package dev.whips.solana4j.exceptions;
 
 import dev.whips.solana4j.client.data.SolanaError;
 

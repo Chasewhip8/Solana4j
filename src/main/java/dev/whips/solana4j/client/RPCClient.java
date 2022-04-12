@@ -3,8 +3,8 @@ package dev.whips.solana4j.client;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.whips.solana4j.SolanaCluster;
-import dev.whips.solana4j.client.exceptions.RPCException;
-import dev.whips.solana4j.data.providers.JacksonMappingsProvider;
+import dev.whips.solana4j.exceptions.RPCException;
+import dev.whips.solana4j.client.providers.JacksonMappingsProvider;
 import okhttp3.*;
 
 import java.io.*;

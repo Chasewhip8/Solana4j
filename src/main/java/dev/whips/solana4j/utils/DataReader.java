@@ -1,7 +1,7 @@
 package dev.whips.solana4j.utils;
 
 import com.google.common.primitives.UnsignedLong;
-import dev.whips.solana4j.data.PubKey;
+import dev.whips.solana4j.client.data.PubKey;
 
 import java.math.BigInteger;
 import java.util.Arrays;
