@@ -32,7 +32,7 @@ public class RPCClient {
 
             Request request = new Request.Builder()
                     .url(cluster.getEndpoint())
-                    .post(RequestBody.create(data, mediaType))
+                    .post(RequestBody.create(mediaType, data))
                     .build();
 
             Response response = client.newCall(request).execute();

@@ -1,11 +1,9 @@
 package dev.whips.solana4j.client.data.filters;
 
-import com.google.common.primitives.UnsignedLong;
-
 public class DataSizeFilter implements Filter{
-    private UnsignedLong dataSize;
+    private int dataSize;
 
-    public DataSizeFilter(UnsignedLong dataSize) {
+    public DataSizeFilter(int dataSize) {
         this.dataSize = dataSize;
     }
 
@@ -13,7 +11,7 @@ public class DataSizeFilter implements Filter{
 
     }
 
-    public UnsignedLong getDataSize() {
+    public int getDataSize() {
         return dataSize;
     }
 }

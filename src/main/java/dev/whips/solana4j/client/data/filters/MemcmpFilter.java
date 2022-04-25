@@ -1,36 +1,49 @@
 package dev.whips.solana4j.client.data.filters;
 
-import com.google.common.primitives.UnsignedLong;
 import io.github.novacrypto.base58.Base58;
 
 public class MemcmpFilter implements Filter {
-    private UnsignedLong offset;
-    private String bytes;
+    private Memcmp memcmp;
 
-    public MemcmpFilter(UnsignedLong offset, String bytes) {
-        this.offset = offset;
-        this.bytes = bytes;
+    public MemcmpFilter(int offset, String bytes) {
+        this.memcmp = new Memcmp(offset, bytes);
     }
 
-    public MemcmpFilter(UnsignedLong offset, byte[] bytes) {
-        this.offset = offset;
-
+    public MemcmpFilter(int offset, byte[] bytes) {
         if (bytes.length > 129){
             throw new IllegalArgumentException("Invalid byte length for Memcmp, 129 max.");
         }
 
-        this.bytes = Base58.base58Encode(bytes);
+        this.memcmp = new Memcmp(offset, Base58.base58Encode(bytes));
     }
 
     public MemcmpFilter() {
 
     }
 
-    public UnsignedLong getOffset() {
-        return offset;
+    public Memcmp getMemcmp() {
+        return memcmp;
     }
 
-    public String getBytes() {
-        return bytes;
+    public static class Memcmp {
+        private int offset;
+        private String bytes;
+
+        public Memcmp(int offset, String bytes) {
+            this.offset = offset;
+            this.bytes = bytes;
+        }
+
+        public Memcmp() {
+
+        }
+
+        public int getOffset() {
+            return offset;
+        }
+
+        public String getBytes() {
+            return bytes;
+        }
     }
 }

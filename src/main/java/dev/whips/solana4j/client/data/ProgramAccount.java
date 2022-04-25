@@ -2,9 +2,9 @@ package dev.whips.solana4j.client.data;
 
 public class ProgramAccount {
     private AccountInfo account;
-    private String pubkey;
+    private PubKey pubkey;
 
-    public ProgramAccount(AccountInfo account, String pubkey) {
+    public ProgramAccount(AccountInfo account, PubKey pubkey) {
         this.account = account;
         this.pubkey = pubkey;
     }
@@ -17,7 +17,7 @@ public class ProgramAccount {
         return account;
     }
 
-    public String getPubkey() {
+    public PubKey getPubkey() {
         return pubkey;
     }
 }

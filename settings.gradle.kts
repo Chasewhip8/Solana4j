@@ -1,2 +1,2 @@
-rootProject.name = "Solana4J"
+rootProject.name = "Solana4j"
 

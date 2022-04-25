@@ -35,7 +35,7 @@ public class PubKey {
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(key);
+        return stringKey.hashCode();
     }
 
     @Override

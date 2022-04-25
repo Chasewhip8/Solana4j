@@ -1,9 +1,10 @@
 plugins {
     java
+    `maven-publish`
 }
 
 group = "dev.whips"
-version = "1.0-SNAPSHOT"
+version = "1.0"
 
 repositories {
     mavenCentral()
@@ -16,7 +17,7 @@ dependencies {
 
     // Web
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.12.4")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.13.2")
 
     // Testing
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
@@ -25,4 +26,12 @@ dependencies {
 
 tasks.getByName<Test>("test") {
     useJUnitPlatform()
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["java"])
+        }
+    }
 }

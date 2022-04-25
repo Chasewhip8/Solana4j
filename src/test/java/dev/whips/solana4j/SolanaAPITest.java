@@ -4,10 +4,10 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class SolanaAPITest {
-    private SolanaAPI api;
+    private static SolanaAPI api;
 
     @BeforeAll
-    public void initApi(){
+    public static void initApi(){
         api = new SolanaAPIBuilder()
                 .setCluster(SolanaCluster.MAINNET_BETA)
                 .build();
