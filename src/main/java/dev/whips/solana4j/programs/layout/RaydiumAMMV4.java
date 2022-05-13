@@ -9,7 +9,7 @@ import dev.whips.solana4j.exceptions.RPCException;
 import dev.whips.solana4j.client.data.PubKey;
 import dev.whips.solana4j.programs.BaseProgram;
 import dev.whips.solana4j.utils.DataReader;
-import dev.whips.solana4j.utils.NumberUtils;
+import dev.whips.solana4j.utils.DataUtils;
 
 import java.math.BigInteger;
 
@@ -142,19 +142,19 @@ public class RaydiumAMMV4 extends BaseProgram {
         int baseDecimals = getBase_decimal().intValue();
         int quoteDecimals = getQuote_decimal().intValue();
 
-        double base = NumberUtils.toDecimal(new SPLTokenAccount(
+        double base = DataUtils.toDecimal(new SPLTokenAccount(
                 api.getAccountInfo(getBase_vault(), RPCEncoding.BASE64).getDataReader()
         ).getAmount().longValue(), baseDecimals);
-        double quote = NumberUtils.toDecimal(new SPLTokenAccount(
+        double quote = DataUtils.toDecimal(new SPLTokenAccount(
                 api.getAccountInfo(getQuote_vault(), RPCEncoding.BASE64).getDataReader()
         ).getAmount().longValue(), quoteDecimals);
 
         SerumOpenOrdersV2 serumOpenOrders = new SerumOpenOrdersV2(api.getAccountInfo(getOpen_orders(), RPCEncoding.BASE64).getDataReader());
 
-        double baseTotal = base + NumberUtils.toDecimal(serumOpenOrders.getBaseTokenTotal().longValue(), baseDecimals)
-                - NumberUtils.toDecimal(getBase_need_take_pnl().longValue(), baseDecimals);
-        double quoteTotal = quote + NumberUtils.toDecimal(serumOpenOrders.getQuoteTokenTotal().longValue(), quoteDecimals)
-                - NumberUtils.toDecimal(getQuote_need_take_pnl().longValue(), quoteDecimals);
+        double baseTotal = base + DataUtils.toDecimal(serumOpenOrders.getBaseTokenTotal().longValue(), baseDecimals)
+                - DataUtils.toDecimal(getBase_need_take_pnl().longValue(), baseDecimals);
+        double quoteTotal = quote + DataUtils.toDecimal(serumOpenOrders.getQuoteTokenTotal().longValue(), quoteDecimals)
+                - DataUtils.toDecimal(getQuote_need_take_pnl().longValue(), quoteDecimals);
 
         return quoteTotal / baseTotal;
     }

@@ -26,16 +26,17 @@ public class Tester {
         PubKey wallet = new PubKey("24y6Hi2nUCjAP7Lzxm1kqMjA2UfUMMosKkETxJeqMcWT");
         PubKey JFI_USDC_AMM_Market = new PubKey("8Skw2e6PeEvyoMGXsKAk4TLM86Qh29zRQYXzXEzxRm8Y");
 
-/*        RaydiumAMMV4 raydiumAMMV4 = new RaydiumAMMV4(solanaAPI, JFI_USDC_AMM_Market);
-        System.out.println(raydiumAMMV4.requestCurrentPrice());*/
+        RaydiumAMMV4 raydiumAMMV4 = new RaydiumAMMV4(solanaAPI, JFI_USDC_AMM_Market);
+        System.out.println(raydiumAMMV4.requestCurrentPrice());
         PubKey soceanJFIContract = new PubKey("ErdVK113JZZnBHnqFxrmsZ3c3RxVwCQ6xwgd1LMuLuFe");
         PubKey jungleJFIContract = new PubKey("GePFQaZKHcWE5vpxHfviQtH5jgxokSs51Y5Q4zgBiMDs");
         PubKey jungleJFILPContract = new PubKey("J2hGHwbkpj2SVo6Bs4X2Houy7n6oauydhbh9D6HpKBU4");
         PubKey jungleJFICALLContract = new PubKey("etCPUaMghWobVwxug5Vgxb6r3A7DEBdLKUywrnDrJeZ");
 
-        System.out.println(getUniqueHolders(solanaAPI,
-                soceanJFIContract, jungleJFIContract, jungleJFILPContract, jungleJFICALLContract
-        ));
+//        System.out.println(getUniqueHolders(solanaAPI,
+//                soceanJFIContract, jungleJFIContract, jungleJFILPContract, jungleJFICALLContract
+//        ));
+
     }
 
     private static int getUniqueHolders(SolanaAPI solanaAPI, PubKey... pubKeys) throws RPCException, ContractException {

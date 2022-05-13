@@ -14,17 +14,15 @@ import dev.whips.solana4j.client.data.results.ContextResult;
 import dev.whips.solana4j.exceptions.RPCException;
 import dev.whips.solana4j.client.data.PubKey;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 public class SolanaAPI {
     private final SolanaCluster cluster;
     private final RPCClient rpcClient;
 
-    public SolanaAPI(SolanaCluster cluster) {
+    public SolanaAPI(SolanaCluster cluster, int readTimeout) {
         this.cluster = cluster;
-        this.rpcClient = new RPCClient(cluster);
+        this.rpcClient = new RPCClient(cluster, readTimeout);
     }
 
     private void checkError(RPCResponse<?> response) throws RPCException {
