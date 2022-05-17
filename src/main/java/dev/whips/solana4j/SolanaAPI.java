@@ -5,7 +5,7 @@ import com.google.common.primitives.UnsignedLong;
 import dev.whips.solana4j.client.*;
 import dev.whips.solana4j.client.data.AccountInfo;
 import dev.whips.solana4j.client.data.ProgramAccount;
-import dev.whips.solana4j.client.data.TokenSupply;
+import dev.whips.solana4j.client.data.TokenBalance;
 import dev.whips.solana4j.client.data.config.GeneralConfig;
 import dev.whips.solana4j.client.data.config.ProgramAccountConfig;
 import dev.whips.solana4j.client.data.enums.RPCEncoding;
@@ -16,10 +16,7 @@ import dev.whips.solana4j.client.websocket.*;
 import dev.whips.solana4j.exceptions.RPCException;
 import dev.whips.solana4j.client.data.PubKey;
 
-import java.net.URI;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 public class SolanaAPI {
     private final RPCClient rpcClient;
@@ -69,9 +66,19 @@ public class SolanaAPI {
         return response.getResult();
     }
 
-    public ContextResult<TokenSupply> getTokenSupply(PubKey pubKey) throws RPCException{
-        RPCResponse<ContextResult<TokenSupply>> response = rpcClient.call(
+    public ContextResult<TokenBalance> getTokenSupply(PubKey pubKey) throws RPCException{
+        RPCResponse<ContextResult<TokenBalance>> response = rpcClient.call(
                 RPCMethod.GET_TOKEN_SUPPLY, new TypeReference<>(){},
+                pubKey
+        );
+        checkError(response);
+
+        return response.getResult();
+    }
+
+    public ContextResult<TokenBalance> getTokenAccountBalance(PubKey pubKey) throws RPCException{
+        RPCResponse<ContextResult<TokenBalance>> response = rpcClient.call(
+                RPCMethod.GET_TOKEN_ACCOUNT_BALANCE, new TypeReference<>(){},
                 pubKey
         );
         checkError(response);

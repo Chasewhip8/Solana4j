@@ -1,25 +1,16 @@
 package dev.whips.solana4j;
 
-import com.google.common.primitives.UnsignedLong;
 import dev.whips.solana4j.client.data.AccountInfo;
 import dev.whips.solana4j.client.data.ProgramAccount;
-import dev.whips.solana4j.client.data.TokenSupply;
-import dev.whips.solana4j.client.data.config.ProgramAccountConfig;
 import dev.whips.solana4j.client.data.enums.RPCEncoding;
 import dev.whips.solana4j.client.data.filters.DataSizeFilter;
 import dev.whips.solana4j.client.data.filters.DataSliceFilter;
 import dev.whips.solana4j.client.data.filters.MemcmpFilter;
-import dev.whips.solana4j.client.data.results.ContextResult;
-import dev.whips.solana4j.client.websocket.NotificationListener;
-import dev.whips.solana4j.client.websocket.RPCNotification;
-import dev.whips.solana4j.client.websocket.RPCSubscription;
 import dev.whips.solana4j.client.websocket.Subsciption;
 import dev.whips.solana4j.exceptions.ContractException;
 import dev.whips.solana4j.exceptions.RPCException;
 import dev.whips.solana4j.client.data.PubKey;
 import dev.whips.solana4j.programs.layout.RaydiumAMMV4;
-import dev.whips.solana4j.programs.layout.SPLTokenAccount;
-import dev.whips.solana4j.programs.layout.SaberStableSwap;
 import dev.whips.solana4j.programs.layout.SerumOpenOrdersV2;
 import dev.whips.solana4j.utils.DataReader;
 
@@ -33,13 +24,11 @@ public class Tester {
                 .setCluster(SolanaCluster.GENESYS_GO_MAINNET)
                 .build();
 
-/*        PubKey wallet = new PubKey("24y6Hi2nUCjAP7Lzxm1kqMjA2UfUMMosKkETxJeqMcWT");
+        PubKey wallet = new PubKey("24y6Hi2nUCjAP7Lzxm1kqMjA2UfUMMosKkETxJeqMcWT");
         PubKey JFI_USDC_AMM_Market = new PubKey("8Skw2e6PeEvyoMGXsKAk4TLM86Qh29zRQYXzXEzxRm8Y");
 
         RaydiumAMMV4 raydiumAMMV4 = new RaydiumAMMV4(solanaAPI, JFI_USDC_AMM_Market);
-        System.out.println(raydiumAMMV4.requestCurrentPrice());*/
-
-
+        System.out.println(raydiumAMMV4.requestCurrentPrice());
 
         PubKey market = new PubKey("58oQChx4yWmvKdwLLZzBi4ChoCc2fqCUWBkwMihLYQo2");
         RaydiumAMMV4 raydiumAMMV41 = new RaydiumAMMV4(solanaAPI, market);
@@ -96,7 +85,7 @@ public class Tester {
 *//*        AccountInfo accountInfo = solanaAPI.getAccountInfo(, RPCEncoding.BASE64);
         SPLTokenAccount tokenAccount = new SPLTokenAccount(accountInfo.getDataReader());*//*
 
-        TokenSupply tokenSupply = solanaAPI.getTokenSupply(saberStableSwap.getTokenPool()).getValue();
+        TokenBalance tokenSupply = solanaAPI.getTokenSupply(saberStableSwap.getTokenPool()).getValue();
         System.out.println(
                 UnsignedLong.valueOf(tokenSupply.getAmount())
                 .times(UnsignedLong.)
