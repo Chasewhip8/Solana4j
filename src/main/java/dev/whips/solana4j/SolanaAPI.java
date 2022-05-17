@@ -22,13 +22,11 @@ import java.util.List;
 import java.util.Set;
 
 public class SolanaAPI {
-    private final SolanaCluster cluster;
     private final RPCClient rpcClient;
     private final SolanaWebSocketClient webSocketClient;
 
-    public SolanaAPI(SolanaCluster cluster) {
-        this.cluster = cluster;
-        this.rpcClient = new RPCClient(cluster);
+    public SolanaAPI(SolanaCluster cluster, int readTimeout) {
+        this.rpcClient = new RPCClient(cluster, readTimeout);
         this.webSocketClient = new SolanaWebSocketClient(cluster);
     }
 

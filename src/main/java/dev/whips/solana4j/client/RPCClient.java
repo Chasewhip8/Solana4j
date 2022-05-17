@@ -8,6 +8,7 @@ import dev.whips.solana4j.client.providers.JacksonMappingsProvider;
 import okhttp3.*;
 
 import java.io.*;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -18,9 +19,11 @@ public class RPCClient {
     private final OkHttpClient client;
     private final ObjectMapper objectMapper;
 
-    public RPCClient(SolanaCluster cluster) {
+    public RPCClient(SolanaCluster cluster, int readTimeout) {
         this.cluster = cluster;
-        this.client = new OkHttpClient();
+        this.client = new OkHttpClient.Builder()
+                .readTimeout(Duration.ofMillis(readTimeout))
+                .build();
         this.objectMapper = JacksonMappingsProvider.createObjectMapper();
     }
 

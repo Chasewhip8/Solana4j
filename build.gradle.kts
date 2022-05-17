@@ -8,12 +8,14 @@ version = "1.1"
 
 repositories {
     mavenCentral()
+    maven("https://jitpack.io")
 }
 
 dependencies {
     // Data
     implementation("io.github.novacrypto:Base58:2022.01.17@jar")
     implementation("com.google.guava:guava:31.1-jre")
+    implementation("com.github.InstantWebP2P:tweetnacl-java:v1.1.2")
 
     // Web
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
