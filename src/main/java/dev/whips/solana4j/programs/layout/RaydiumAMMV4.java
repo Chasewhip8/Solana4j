@@ -86,7 +86,63 @@ public class RaydiumAMMV4 extends BaseProgram {
         DataReader dataReader = accountInfo.getDataReader();
 
         checkProgramSize(dataReader, 752);
-        
+
+        this.status = dataReader.readU64();
+        this.nonce = dataReader.readU64();
+        this.max_order = dataReader.readU64();
+        this.depth = dataReader.readU64();
+        this.base_decimal = dataReader.readU64();
+        this.quote_decimal = dataReader.readU64();
+        this.state = dataReader.readU64();
+        this.reset_flag = dataReader.readU64();
+        this.min_size = dataReader.readU64();
+        this.vol_max_cut_ratio = dataReader.readU64();
+        this.amount_wave_ratio = dataReader.readU64();
+        this.base_lot_size = dataReader.readU64();
+        this.quote_lot_size = dataReader.readU64();
+        this.min_price_multiplier = dataReader.readU64();
+        this.max_price_multiplier = dataReader.readU64();
+        this.system_decimal_value = dataReader.readU64();
+        this.min_separate_numerator = dataReader.readU64();
+        this.min_separate_denominator = dataReader.readU64();
+        this.trade_fee_numerator = dataReader.readU64();
+        this.trade_fee_denominator = dataReader.readU64();
+        this.pnl_numerator = dataReader.readU64();
+        this.pnl_denominator = dataReader.readU64();
+        this.swap_fee_numerator = dataReader.readU64();
+        this.swap_fee_denominator = dataReader.readU64();
+        this.base_need_take_pnl = dataReader.readU64();
+        this.quote_need_take_pnl = dataReader.readU64();
+        this.quote_total_pnl = dataReader.readU64();
+        this.base_total_pnl = dataReader.readU64();
+        this.quote_total_deposited = dataReader.readU128();
+        this.base_total_deposited = dataReader.readU128();
+        this.swap_base_in_amount = dataReader.readU128();
+        this.swap_quote_out_amount = dataReader.readU128();
+        this.swap_base2_quote_fee = dataReader.readU64();
+        this.swap_quote_in_amount = dataReader.readU128();
+        this.swap_base_out_amount = dataReader.readU128();
+        this.swap_quote2_base_fee = dataReader.readU64();
+        this.base_vault = dataReader.readPubKey();
+        this.quote_vault = dataReader.readPubKey();
+        this.base_mint = dataReader.readPubKey();
+        this.quote_mint = dataReader.readPubKey();
+        this.lp_mint = dataReader.readPubKey();
+        this.open_orders = dataReader.readPubKey();
+        this.market_id = dataReader.readPubKey();
+        this.market_program_id = dataReader.readPubKey();
+        this.target_orders = dataReader.readPubKey();
+        this.withdraw_queue = dataReader.readPubKey();
+        this.lp_vault = dataReader.readPubKey();
+        this.owner = dataReader.readPubKey();
+        this.pnl_owner = dataReader.readPubKey();
+    }
+
+    public RaydiumAMMV4(SolanaAPI api, DataReader dataReader) throws RPCException {
+        this.api = api;
+
+        checkProgramSize(dataReader, 752);
+
         this.status = dataReader.readU64();
         this.nonce = dataReader.readU64();
         this.max_order = dataReader.readU64();

@@ -7,6 +7,7 @@ import java.math.BigInteger;
 import java.util.Arrays;
 
 public class DataReader {
+    private static final int UINT_8_LENGTH = 1;
     private static final int UINT_32_LENGTH = 4;
     private static final int UINT_64_LENGTH = 8;
     private static final int UINT_128_LENGTH = 16;
@@ -18,6 +19,14 @@ public class DataReader {
     public DataReader(byte[] bytes) {
         this.bytes = bytes;
         this.currentOffset = 0;
+    }
+
+    public long readU8(){
+        return readRawLong(UINT_8_LENGTH);
+    }
+
+    public UnsignedLong readU8UnsignedLong(){
+        return UnsignedLong.fromLongBits(readRawLong(UINT_8_LENGTH));
     }
 
     public UnsignedLong readU32(){

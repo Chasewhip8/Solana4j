@@ -51,7 +51,18 @@ public enum RPCMethod {
         MINIMUM_LEDGER_SLOT("minimumLedgerSlot"),
         REQUEST_AIRDROP("requestAirdrop"), // TODO
         SEND_TRANSACTION("sendTransaction"), // TODO
-        SIMULATE_TRANSACTION("simulateTransaction");
+        SIMULATE_TRANSACTION("simulateTransaction"),
+
+        WEB_SOCKET_ACCOUNT_SUBSCRIBE("accountSubscribe"),
+        WEB_SOCKET_ACCOUNT_UNSUBSCRIBE("accountUnsubscribe"),
+        WEB_SOCKET_LOGS_SUBSCRIBE("logsSubscribe"),
+        WEB_SOCKET_LOGS_UNSUBSCRIBE("logsUnsubscribe"),
+        WEB_SOCKET_PROGRAM_SUBSCRIBE("programSubscribe"),
+        WEB_SOCKET_PROGRAM_UNSUBSCRIBE("programUnsubscribe"),
+        WEB_SOCKET_SIGNATURE_SUBSCRIBE("signatureSubscribe"),
+        WEB_SOCKET_SIGNATURE_UNSUBSCRIBE("signatureUnsubscribe"),
+        WEB_SOCKET_SLOT_SUBSCRIBE("slotSubscribe"),
+        WEB_SOCKET_SLOT_UNSUBSCRIBE("slotUnsubscribe");
 
         String method;
 

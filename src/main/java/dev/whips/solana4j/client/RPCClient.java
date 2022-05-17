@@ -17,18 +17,16 @@ public class RPCClient {
     private final SolanaCluster cluster;
     private final OkHttpClient client;
     private final ObjectMapper objectMapper;
-    private final int identifier;
 
     public RPCClient(SolanaCluster cluster) {
         this.cluster = cluster;
         this.client = new OkHttpClient();
         this.objectMapper = JacksonMappingsProvider.createObjectMapper();
-        this.identifier = Math.abs(new Random().nextInt()); // Generate a random uuid for the client
     }
 
     public <T> T call(RPCRequest requestData, TypeReference<T> typeReference) throws RPCException {
         try {
-            String data = objectMapper.writeValueAsString(requestData);
+            byte[] data = objectMapper.writeValueAsBytes(requestData);
 
             Request request = new Request.Builder()
                     .url(cluster.getEndpoint())
@@ -49,10 +47,10 @@ public class RPCClient {
     }
 
     public <T> RPCResponse<T> call(RPCMethod method, TypeReference<RPCResponse<T>> typeReference, Object... params) throws RPCException {
-        return call(new RPCRequest("2.0", identifier, method.toString(), Arrays.asList(params)), typeReference);
+        return call(new RPCRequest("2.0", RPCUtils.generateUniqueId(), method.toString(), Arrays.asList(params)), typeReference);
     }
 
     public <T> T callRaw(RPCMethod method, TypeReference<T> typeReference, Object... params) throws RPCException {
-        return call(new RPCRequest("2.0", identifier, method.toString(), Arrays.asList(params)), typeReference);
+        return call(new RPCRequest("2.0", RPCUtils.generateUniqueId(), method.toString(), Arrays.asList(params)), typeReference);
     }
 }

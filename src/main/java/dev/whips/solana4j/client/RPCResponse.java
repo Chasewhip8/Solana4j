@@ -16,7 +16,7 @@ public class RPCResponse<T> {
     }
 
     public RPCResponse() {
-
+        
     }
 
     public String getJsonrpc() {

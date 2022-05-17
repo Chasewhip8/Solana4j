@@ -20,6 +20,16 @@ public class JacksonMappingsProvider {
         return objectMapper;
     }
 
+    public static ObjectMapper createObjectMapper(DeserializationFeature... features){
+        ObjectMapper objectMapper = createObjectMapper();
+
+        for (DeserializationFeature feature : features){
+             objectMapper.configure(feature, true);
+        }
+
+        return objectMapper;
+    }
+
     public static class UnsignedLongSerializer extends JsonSerializer<UnsignedLong> {
         @Override
         public void serialize(UnsignedLong value, JsonGenerator gen, SerializerProvider serializers)
