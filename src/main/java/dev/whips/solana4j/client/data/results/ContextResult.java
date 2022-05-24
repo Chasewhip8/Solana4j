@@ -23,9 +23,11 @@ public class ContextResult<T> {
 
     public static class Context {
         private long slot;
+        private String apiVersion;
 
-        public Context(long slot) {
+        public Context(long slot, String apiVersion) {
             this.slot = slot;
+            this.apiVersion = apiVersion;
         }
 
         public Context() {
@@ -34,6 +36,10 @@ public class ContextResult<T> {
 
         public long getSlot() {
             return slot;
+        }
+
+        public String getApiVersion() {
+            return apiVersion;
         }
     }
 }

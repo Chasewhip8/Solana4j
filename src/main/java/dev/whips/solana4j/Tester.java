@@ -30,7 +30,7 @@ public class Tester {
         RaydiumAMMV4 raydiumAMMV4 = new RaydiumAMMV4(solanaAPI, JFI_USDC_AMM_Market);
         System.out.println(raydiumAMMV4.requestCurrentPrice());
 
-        PubKey market = new PubKey("58oQChx4yWmvKdwLLZzBi4ChoCc2fqCUWBkwMihLYQo2");
+/*        PubKey market = new PubKey("58oQChx4yWmvKdwLLZzBi4ChoCc2fqCUWBkwMihLYQo2");
         RaydiumAMMV4 raydiumAMMV41 = new RaydiumAMMV4(solanaAPI, market);
 
         System.out.println("Subscribing to 1");
@@ -66,7 +66,7 @@ public class Tester {
         System.out.println("Un-Subscribing from 1");
         solanaAPI.unSubscribeAccount(subscription);
 
-        Thread.sleep(10000000);
+        Thread.sleep(10000000);*/
 
 
 
