@@ -22,6 +22,7 @@ public class SolanaWebSocketClient extends WebSocketClient {
     private final ObjectMapper objectMapper;
 
     private int expectOtherResponse = 0;
+    private boolean connected;
 
     public SolanaWebSocketClient(SolanaCluster cluster) {
         super(cluster.getWebSocketEndpoint());
@@ -29,13 +30,15 @@ public class SolanaWebSocketClient extends WebSocketClient {
         this.pendingSubscriptions = new HashMap<>();
         this.objectMapper = JacksonMappingsProvider.createObjectMapper(
                 DeserializationFeature.USE_LONG_FOR_INTS);
-
-        connect();
     }
 
     @SuppressWarnings("unchecked")
     public <T> Subsciption<T> subscribe(RPCMethod rpcMethod, TypeReference<RPCNotification<T>> typeReference,
                                         NotificationListener<RPCNotification<T>> listener, Object... params) throws RPCException {
+        if (!connected){
+            connect();
+        }
+
         final int paramHash = calculateParamHash(params);
         for (RPCSubscription<?> subscription : subscriptions.values()){
             if (rpcMethod.equals(subscription.getMethod()) && subscription.hashCode() == paramHash){

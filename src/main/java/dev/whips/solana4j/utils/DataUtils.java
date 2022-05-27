@@ -5,6 +5,10 @@ public class DataUtils {
         return value * Math.pow(10, -decimals);
     }
 
+    public static double toDecimal(String stringValue, int decimals){
+        return Long.parseLong(stringValue) * Math.pow(10, -decimals);
+    }
+
     public static byte[] getCompactLength(int length){
         if (length > 0x3fff){
             return new byte[] {

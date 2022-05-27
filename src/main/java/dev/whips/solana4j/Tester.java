@@ -11,6 +11,7 @@ import dev.whips.solana4j.exceptions.ContractException;
 import dev.whips.solana4j.exceptions.RPCException;
 import dev.whips.solana4j.client.data.PubKey;
 import dev.whips.solana4j.programs.layout.RaydiumAMMV4;
+import dev.whips.solana4j.programs.layout.SaberStableSwap;
 import dev.whips.solana4j.programs.layout.SerumOpenOrdersV2;
 import dev.whips.solana4j.utils.DataReader;
 
@@ -27,8 +28,14 @@ public class Tester {
         PubKey wallet = new PubKey("24y6Hi2nUCjAP7Lzxm1kqMjA2UfUMMosKkETxJeqMcWT");
         PubKey JFI_USDC_AMM_Market = new PubKey("8Skw2e6PeEvyoMGXsKAk4TLM86Qh29zRQYXzXEzxRm8Y");
 
-        RaydiumAMMV4 raydiumAMMV4 = new RaydiumAMMV4(solanaAPI, JFI_USDC_AMM_Market);
-        System.out.println(raydiumAMMV4.requestCurrentPrice());
+/*        RaydiumAMMV4 raydiumAMMV4 = new RaydiumAMMV4(solanaAPI, JFI_USDC_AMM_Market);
+        System.out.println(raydiumAMMV4.requestCurrentPrice());*/
+
+        PubKey saber = new PubKey("YAkoNb6HKmSxQN9L8hiBE5tPJRsniSSMzND1boHmZxe");
+        SaberStableSwap saberStableSwap = new SaberStableSwap(solanaAPI, saber);
+
+        System.out.printf("%.9f", saberStableSwap.requestRawSwapPriceRatio());
+        System.out.println();
 
 /*        PubKey market = new PubKey("58oQChx4yWmvKdwLLZzBi4ChoCc2fqCUWBkwMihLYQo2");
         RaydiumAMMV4 raydiumAMMV41 = new RaydiumAMMV4(solanaAPI, market);
