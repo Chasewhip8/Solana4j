@@ -1,5 +1,7 @@
 package dev.whips.solana4j.utils;
 
+import dev.whips.solana4j.utils.serialize.ByteSerializable;
+
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 

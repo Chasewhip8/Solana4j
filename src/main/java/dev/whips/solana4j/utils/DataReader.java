@@ -2,6 +2,7 @@ package dev.whips.solana4j.utils;
 
 import com.google.common.primitives.UnsignedLong;
 import dev.whips.solana4j.client.data.PubKey;
+import dev.whips.solana4j.utils.serialize.ByteDeserializer;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -19,6 +20,11 @@ public class DataReader {
     public DataReader(byte[] bytes) {
         this.bytes = bytes;
         this.currentOffset = 0;
+    }
+
+    public <T> T readByteDeserializable(ByteDeserializer<T> byteDeserializable){
+        checkHasEnoughBytes(byteDeserializable.requiredSize());
+        return byteDeserializable.decodeFromBytes(readRawBytes(byteDeserializable.requiredSize()), currentOffset);
     }
 
     public long readU8(){

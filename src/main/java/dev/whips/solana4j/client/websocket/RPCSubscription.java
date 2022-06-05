@@ -3,7 +3,6 @@ package dev.whips.solana4j.client.websocket;
 import com.fasterxml.jackson.core.type.TypeReference;
 import dev.whips.solana4j.client.RPCMethod;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -12,16 +11,17 @@ public class RPCSubscription<T> {
     private final RPCMethod method;
     private final Set<NotificationListener<RPCNotification<T>>> listeners;
     private final TypeReference<RPCNotification<T>> typeReference;
+    private final List<Object> params;
     private final int paramHash;
 
     private long subscription;
     private boolean open;
 
-    public RPCSubscription(RPCMethod method, TypeReference<RPCNotification<T>> typeReference, int paramHash) {
+    public RPCSubscription(RPCMethod method, TypeReference<RPCNotification<T>> typeReference, List<Object> params, int paramHash) {
         this.method = method;
         this.listeners = new HashSet<>();
         this.typeReference = typeReference;
-        this.open = false;
+        this.params = params;
         this.paramHash = paramHash;
     }
 

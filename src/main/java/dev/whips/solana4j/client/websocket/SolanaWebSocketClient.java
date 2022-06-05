@@ -14,7 +14,10 @@ import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 public class SolanaWebSocketClient extends WebSocketClient {
     private final HashMap<Integer, RPCSubscription<?>> pendingSubscriptions;
@@ -33,10 +36,16 @@ public class SolanaWebSocketClient extends WebSocketClient {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> Subsciption<T> subscribe(RPCMethod rpcMethod, TypeReference<RPCNotification<T>> typeReference,
-                                        NotificationListener<RPCNotification<T>> listener, Object... params) throws RPCException {
-        if (!connected){
-            connect();
+    public <T> Subscription<T> subscribe(RPCMethod rpcMethod, TypeReference<RPCNotification<T>> typeReference,
+                                         NotificationListener<RPCNotification<T>> listener, Object... params) throws RPCException {
+        if (!connected || isClosed()){
+            try {
+                connectBlocking();
+                this.connected = true;
+            } catch (InterruptedException e){
+                e.printStackTrace();
+                this.connected = false;
+            }
         }
 
         final int paramHash = calculateParamHash(params);
@@ -44,18 +53,19 @@ public class SolanaWebSocketClient extends WebSocketClient {
             if (rpcMethod.equals(subscription.getMethod()) && subscription.hashCode() == paramHash){
                 RPCSubscription<T> rawSubscription = (RPCSubscription<T>) subscription;
                 rawSubscription.addListener(listener);
-                return new Subsciption<T>(rawSubscription, listener);
+                return new Subscription<T>(rawSubscription, listener);
             }
         }
 
         final int subscriptionId = RPCUtils.generateUniqueId();
 
-        RPCSubscription<T> subscription = new RPCSubscription<T>(rpcMethod, typeReference, paramHash);
+        List<Object> paramList = List.of(params);
+        RPCSubscription<T> subscription = new RPCSubscription<T>(rpcMethod, typeReference, paramList, paramHash);
         subscription.addListener(listener);
         addPendingSubscription(subscriptionId, subscription);
 
         try {
-            RPCRequest request = new RPCRequest("2.0", subscriptionId, rpcMethod.toString(), List.of(params));
+            RPCRequest request = new RPCRequest("2.0", subscriptionId, rpcMethod.toString(), paramList);
             final byte[] data = objectMapper.writeValueAsBytes(request);
             setExpectOtherResponse();
             send(data);
@@ -64,10 +74,10 @@ public class SolanaWebSocketClient extends WebSocketClient {
             throw new RPCException(e.getMessage());
         }
 
-        return new Subsciption<>(subscription, listener);
+        return new Subscription<>(subscription, listener);
     }
 
-    public void unSubscribe(RPCMethod method, Subsciption<?> wrappedSubscription) throws RPCException{
+    public void unSubscribe(RPCMethod method, Subscription<?> wrappedSubscription) throws RPCException{
         RPCSubscription<?> subscription = wrappedSubscription.getSubscription();
         NotificationListener<?> listener = wrappedSubscription.getListener();
 
@@ -186,6 +196,30 @@ public class SolanaWebSocketClient extends WebSocketClient {
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
+        if (tryReconnection()){
+            reInitializeSubscriptions();
+        } else {
+            if (tryReconnection()){
+                reInitializeSubscriptions();
+            } else {
+                // TODO switch to fallback cluster
+
+            }
+        }
+
+        // TODO reconnect and resend all subscriptions
+    }
+
+    private boolean tryReconnection(){
+        try {
+            return reconnectBlocking();
+        } catch (InterruptedException e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private void reInitializeSubscriptions(){
 
     }
 

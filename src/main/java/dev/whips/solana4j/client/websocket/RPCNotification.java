@@ -18,10 +18,10 @@ public class RPCNotification<T> {
     }
 
     public static class Params<T> {
-        private ContextResult<T> result;
+        private T result;
         private long subscription;
 
-        public Params(ContextResult<T> result, long subscription) {
+        public Params(T result, long subscription) {
             this.result = result;
             this.subscription = subscription;
         }
@@ -30,7 +30,7 @@ public class RPCNotification<T> {
 
         }
 
-        public ContextResult<T> getResult() {
+        public T getResult() {
             return result;
         }
 

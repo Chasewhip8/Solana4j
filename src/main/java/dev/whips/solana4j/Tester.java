@@ -1,25 +1,29 @@
 package dev.whips.solana4j;
 
-import dev.whips.solana4j.client.data.AccountInfo;
 import dev.whips.solana4j.client.data.ProgramAccount;
+import dev.whips.solana4j.client.data.PubKey;
 import dev.whips.solana4j.client.data.enums.RPCEncoding;
 import dev.whips.solana4j.client.data.filters.DataSizeFilter;
 import dev.whips.solana4j.client.data.filters.DataSliceFilter;
 import dev.whips.solana4j.client.data.filters.MemcmpFilter;
-import dev.whips.solana4j.client.websocket.Subsciption;
 import dev.whips.solana4j.exceptions.ContractException;
 import dev.whips.solana4j.exceptions.RPCException;
-import dev.whips.solana4j.client.data.PubKey;
+import dev.whips.solana4j.programs.dynamic.DynamicRaydiumAMM;
 import dev.whips.solana4j.programs.layout.RaydiumAMMV4;
-import dev.whips.solana4j.programs.layout.SaberStableSwap;
-import dev.whips.solana4j.programs.layout.SerumOpenOrdersV2;
+import dev.whips.solana4j.programs.layout.SysvarClock;
 import dev.whips.solana4j.utils.DataReader;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.io.File;
+import java.io.FileReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Tester {
+    private static double lastPrice;
+
     public static void main(String[] args) throws Exception {
         SolanaAPI solanaAPI = new SolanaAPIBuilder()
                 .setCluster(SolanaCluster.GENESYS_GO_MAINNET)
@@ -27,22 +31,47 @@ public class Tester {
 
         PubKey wallet = new PubKey("24y6Hi2nUCjAP7Lzxm1kqMjA2UfUMMosKkETxJeqMcWT");
         PubKey JFI_USDC_AMM_Market = new PubKey("8Skw2e6PeEvyoMGXsKAk4TLM86Qh29zRQYXzXEzxRm8Y");
+        PubKey SOL_USDC_AMM_Market = new PubKey("58oQChx4yWmvKdwLLZzBi4ChoCc2fqCUWBkwMihLYQo2");
 
-/*        RaydiumAMMV4 raydiumAMMV4 = new RaydiumAMMV4(solanaAPI, JFI_USDC_AMM_Market);
-        System.out.println(raydiumAMMV4.requestCurrentPrice());*/
+        RaydiumAMMV4 raydiumAMMV4 = new RaydiumAMMV4(solanaAPI, SOL_USDC_AMM_Market);
+        System.out.println("Static: " + raydiumAMMV4.requestCurrentPrice());
 
-        PubKey saber = new PubKey("YAkoNb6HKmSxQN9L8hiBE5tPJRsniSSMzND1boHmZxe");
+        DynamicRaydiumAMM raydiumAMM = new DynamicRaydiumAMM(solanaAPI, SOL_USDC_AMM_Market);
+        raydiumAMM.subscribePrice((price) -> {
+            double diff = price - lastPrice;
+            if (Math.abs(diff) > 5) {
+                System.out.printf("Price Updated: " + price + " Change: %f", diff);
+                System.out.println();
+            }
+            lastPrice = price;
+        });
+
+/*        solanaAPI.subscribeSlot((update) -> {
+            System.out.println("Slot: " + update.getParams().getResult().getSlot());
+            System.out.println("Parent: " + update.getParams().getResult().getParent());
+            System.out.println("Root: " + update.getParams().getResult().getRoot());
+        });
+
+        solanaAPI.subscribeAccount(new PubKey("SysvarC1ock11111111111111111111111111111111"), RPCEncoding.BASE64, (update) -> {
+            try {
+                System.out.println("Clock Slot: " + new SysvarClock(update.getParams().getResult().getValue().getDataReader()).getSlot());
+            } catch (ContractException e){
+                e.printStackTrace();
+            }
+        });*/
+
+/*        PubKey saber = new PubKey("YAkoNb6HKmSxQN9L8hiBE5tPJRsniSSMzND1boHmZxe");
         SaberStableSwap saberStableSwap = new SaberStableSwap(solanaAPI, saber);
 
         System.out.printf("%.9f", saberStableSwap.requestRawSwapPriceRatio());
-        System.out.println();
+        System.out.println();*/
 
 /*        PubKey market = new PubKey("58oQChx4yWmvKdwLLZzBi4ChoCc2fqCUWBkwMihLYQo2");
         RaydiumAMMV4 raydiumAMMV41 = new RaydiumAMMV4(solanaAPI, market);
 
         System.out.println("Subscribing to 1");
 
-        Subsciption<AccountInfo> subscription = solanaAPI.subscribeAccount(raydiumAMMV41.getOpen_orders(), RPCEncoding.BASE64, (data) -> {{
+        Subscription<AccountInfo> subscription = solanaAPI.subscribeAccount(raydiumAMMV41.getOpen_orders(), RPCEncoding.BASE64, (data) -> {{
             try {
                 SerumOpenOrdersV2 ordersV2 = new SerumOpenOrdersV2(data.getParams().getResult().getValue().getDataReader());
                 System.out.println("1: " + ordersV2.getBaseTokenTotal());
@@ -54,7 +83,7 @@ public class Tester {
         Thread.sleep(5000);
 
         System.out.println("Subscribing to 2");
-        Subsciption<AccountInfo> subscription2 = solanaAPI.subscribeAccount(raydiumAMMV41.getOpen_orders(), RPCEncoding.BASE64, (data) -> {{
+        Subscription<AccountInfo> subscription2 = solanaAPI.subscribeAccount(raydiumAMMV41.getOpen_orders(), RPCEncoding.BASE64, (data) -> {{
             try {
                 SerumOpenOrdersV2 ordersV2 = new SerumOpenOrdersV2(data.getParams().getResult().getValue().getDataReader());
                 System.out.println("2: " + ordersV2.getBaseTokenTotal());

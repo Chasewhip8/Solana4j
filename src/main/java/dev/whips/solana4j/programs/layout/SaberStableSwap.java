@@ -1,6 +1,5 @@
 package dev.whips.solana4j.programs.layout;
 
-import com.google.common.math.BigIntegerMath;
 import com.google.common.primitives.UnsignedLong;
 import dev.whips.solana4j.SolanaAPI;
 import dev.whips.solana4j.client.data.AccountInfo;
@@ -11,7 +10,6 @@ import dev.whips.solana4j.exceptions.ContractException;
 import dev.whips.solana4j.exceptions.RPCException;
 import dev.whips.solana4j.programs.BaseProgram;
 import dev.whips.solana4j.utils.DataReader;
-import dev.whips.solana4j.utils.DataUtils;
 
 import java.math.BigInteger;
 

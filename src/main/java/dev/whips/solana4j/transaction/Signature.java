@@ -1,6 +1,6 @@
 package dev.whips.solana4j.transaction;
 
-import dev.whips.solana4j.utils.ByteSerializable;
+import dev.whips.solana4j.utils.serialize.ByteSerializable;
 
 public class Signature implements ByteSerializable {
     private final int SIGNATURE_LENGTH = 64;

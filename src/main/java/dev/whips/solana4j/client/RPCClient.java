@@ -3,14 +3,13 @@ package dev.whips.solana4j.client;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.whips.solana4j.SolanaCluster;
-import dev.whips.solana4j.exceptions.RPCException;
 import dev.whips.solana4j.client.providers.JacksonMappingsProvider;
+import dev.whips.solana4j.exceptions.RPCException;
 import okhttp3.*;
 
-import java.io.*;
+import java.io.IOException;
 import java.time.Duration;
 import java.util.Arrays;
-import java.util.Random;
 
 public class RPCClient {
     private static final MediaType mediaType = MediaType.parse("application/json");

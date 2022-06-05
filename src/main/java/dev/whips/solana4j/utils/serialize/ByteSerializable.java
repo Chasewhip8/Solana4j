@@ -1,4 +1,4 @@
-package dev.whips.solana4j.utils;
+package dev.whips.solana4j.utils.serialize;
 
 public interface ByteSerializable {
     byte[] serialize();

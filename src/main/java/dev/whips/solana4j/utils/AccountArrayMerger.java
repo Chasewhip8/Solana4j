@@ -1,9 +1,11 @@
 package dev.whips.solana4j.utils;
 
 import dev.whips.solana4j.transaction.Account;
+import dev.whips.solana4j.utils.serialize.ByteSerializable;
 
 import java.nio.ByteBuffer;
-import java.util.*;
+import java.util.Comparator;
+import java.util.TreeSet;
 
 public class AccountArrayMerger extends TreeSet<Account> implements ByteSerializable, ArrayCompactable {
     public AccountArrayMerger() {

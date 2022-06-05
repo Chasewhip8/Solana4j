@@ -3,10 +3,8 @@ package dev.whips.solana4j.client.data;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.github.novacrypto.base58.Base58;
 
-import java.util.Arrays;
-
 public class PubKey {
-    private static final int KEY_LENGTH = 32;
+    public static final int KEY_LENGTH = 32;
 
     private final byte[] key;
     private final String stringKey;

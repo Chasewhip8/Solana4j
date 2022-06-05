@@ -2,7 +2,7 @@ package dev.whips.solana4j.transaction;
 
 import com.iwebpp.crypto.TweetNaclFast;
 import dev.whips.solana4j.client.data.PubKey;
-import dev.whips.solana4j.utils.ByteSerializable;
+import dev.whips.solana4j.utils.serialize.ByteSerializable;
 import org.jetbrains.annotations.NotNull;
 
 public class Account implements ByteSerializable, Comparable<Account> {

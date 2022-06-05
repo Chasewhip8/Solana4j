@@ -1,13 +1,14 @@
 package dev.whips.solana4j.transaction;
 
 import dev.whips.solana4j.client.data.PubKey;
-import dev.whips.solana4j.utils.ByteSerializable;
-import dev.whips.solana4j.utils.CompactArray;
 import dev.whips.solana4j.utils.AccountArrayMerger;
-import org.checkerframework.checker.units.qual.A;
+import dev.whips.solana4j.utils.serialize.ByteSerializable;
 
 import java.nio.ByteBuffer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class Transaction implements ByteSerializable {
     private final List<Instruction> instructions;

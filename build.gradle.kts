@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "dev.whips"
-version = "1.1.1"
+version = "1.1.2"
 
 repositories {
     mavenCentral()
@@ -12,6 +12,8 @@ repositories {
 }
 
 dependencies {
+    implementation("org.slf4j:slf4j-simple:1.7.36")
+
     // Data
     implementation("io.github.novacrypto:Base58:2022.01.17@jar")
     implementation("com.google.guava:guava:31.1-jre")
