@@ -8,7 +8,7 @@ public enum RPCEncoding {
     BASE64_COMPRESSED("base64+zstd"),
     JSON("jsonParsed");
 
-    String encoding;
+    final String encoding;
 
     RPCEncoding(String encoding){
         this.encoding = encoding;

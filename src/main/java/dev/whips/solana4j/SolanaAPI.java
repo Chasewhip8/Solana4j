@@ -27,9 +27,9 @@ public class SolanaAPI {
     private final SolanaWebSocketClient webSocketClient;
     private final UpdatePropagatorManager updatePropagatorManager;
 
-    public SolanaAPI(SolanaCluster cluster, int readTimeout) {
+    public SolanaAPI(SolanaCluster cluster, int readTimeout, int maxReconnectionRetries, int reconnectionDelay) {
         this.rpcClient = new RPCClient(cluster, readTimeout);
-        this.webSocketClient = new SolanaWebSocketClient(cluster);
+        this.webSocketClient = new SolanaWebSocketClient(cluster, maxReconnectionRetries, reconnectionDelay);
         this.updatePropagatorManager = new UpdatePropagatorManager();
     }
 

@@ -14,40 +14,40 @@ import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class SolanaWebSocketClient extends WebSocketClient {
     private final HashMap<Integer, RPCSubscription<?>> pendingSubscriptions;
     private final HashMap<Long, RPCSubscription<?>> subscriptions;
     private final ObjectMapper objectMapper;
+    private final int maxReconnectionRetries;
+    private final int reconnectionDelay;
 
     private int expectOtherResponse = 0;
-    private boolean connected;
+    private volatile boolean isReconnecting = false;
 
-    public SolanaWebSocketClient(SolanaCluster cluster) {
+    public SolanaWebSocketClient(SolanaCluster cluster, int maxReconnectionRetries, int reconnectionDelay) {
         super(cluster.getWebSocketEndpoint());
         this.subscriptions = new HashMap<>();
         this.pendingSubscriptions = new HashMap<>();
         this.objectMapper = JacksonMappingsProvider.createObjectMapper(
                 DeserializationFeature.USE_LONG_FOR_INTS);
+        this.maxReconnectionRetries = maxReconnectionRetries;
+        this.reconnectionDelay = reconnectionDelay;
     }
 
     @SuppressWarnings("unchecked")
     public <T> Subscription<T> subscribe(RPCMethod rpcMethod, TypeReference<RPCNotification<T>> typeReference,
                                          NotificationListener<RPCNotification<T>> listener, Object... params) throws RPCException {
-        if (!connected || isClosed()){
+        if (!isOpen()){
             try {
                 connectBlocking();
-                this.connected = true;
             } catch (InterruptedException e){
                 e.printStackTrace();
-                this.connected = false;
             }
         }
 
+        // Attempt to find existing same rpc subscriptions and add the listener to the list
         final int paramHash = calculateParamHash(params);
         for (RPCSubscription<?> subscription : subscriptions.values()){
             if (rpcMethod.equals(subscription.getMethod()) && subscription.hashCode() == paramHash){
@@ -57,15 +57,20 @@ public class SolanaWebSocketClient extends WebSocketClient {
             }
         }
 
-        final int subscriptionId = RPCUtils.generateUniqueId();
-
-        List<Object> paramList = List.of(params);
-        RPCSubscription<T> subscription = new RPCSubscription<T>(rpcMethod, typeReference, paramList, paramHash);
+        // Subscribe it to the rpc network
+        RPCSubscription<T> subscription = new RPCSubscription<T>(rpcMethod, typeReference, List.of(params), paramHash);
         subscription.addListener(listener);
-        addPendingSubscription(subscriptionId, subscription);
+        subscribeRawSubscription(subscription);
+
+        return new Subscription<>(subscription, listener);
+    }
+
+    private void subscribeRawSubscription(RPCSubscription<?> subscription) throws RPCException {
+        final int subscriptionId = RPCUtils.generateUniqueId(); // Generate a unique id to listen to when subscribing to an event
+        addPendingSubscription(subscriptionId, subscription); // Register it to pending subscriptions
 
         try {
-            RPCRequest request = new RPCRequest("2.0", subscriptionId, rpcMethod.toString(), paramList);
+            RPCRequest request = subscription.buildRequest(subscriptionId); // Build the request with the unique id
             final byte[] data = objectMapper.writeValueAsBytes(request);
             setExpectOtherResponse();
             send(data);
@@ -73,8 +78,6 @@ public class SolanaWebSocketClient extends WebSocketClient {
             removePendingSubscription(subscriptionId);
             throw new RPCException(e.getMessage());
         }
-
-        return new Subscription<>(subscription, listener);
     }
 
     public void unSubscribe(RPCMethod method, Subscription<?> wrappedSubscription) throws RPCException{
@@ -196,18 +199,31 @@ public class SolanaWebSocketClient extends WebSocketClient {
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
-        if (tryReconnection()){
-            reInitializeSubscriptions();
-        } else {
-            if (tryReconnection()){
-                reInitializeSubscriptions();
-            } else {
-                // TODO switch to fallback cluster
-
-            }
+        if (isReconnecting){
+            return;
         }
 
-        // TODO reconnect and resend all subscriptions
+        this.isReconnecting = true;
+        new Thread(() -> {
+            int currentRetries = 0;
+            while (currentRetries < maxReconnectionRetries){
+                currentRetries++;
+
+                if (tryReconnection()){
+                    reInitializeSubscriptions();
+                    this.isReconnecting = false;
+                    return;
+                }
+
+                try {
+                    Thread.sleep(reconnectionDelay);
+                } catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+            }
+
+            throw new RuntimeException("Unable to regain a cluster connection!");
+        }).start();
     }
 
     private boolean tryReconnection(){
@@ -220,7 +236,20 @@ public class SolanaWebSocketClient extends WebSocketClient {
     }
 
     private void reInitializeSubscriptions(){
+        pendingSubscriptions.clear(); // Remove all old pending subscriptions
+        this.expectOtherResponse = 0; // Reset all expecting responses
 
+        // Make a copy since we will be editing items while iterating
+        ArrayList<RPCSubscription<?>> subscriptionsList = new ArrayList<>(subscriptions.values());
+        subscriptions.clear();
+
+        for (RPCSubscription<?> subscription : subscriptionsList) {
+            try {
+                subscribeRawSubscription(subscription);
+            } catch (RPCException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

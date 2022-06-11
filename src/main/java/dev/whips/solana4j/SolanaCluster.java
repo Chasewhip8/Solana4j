@@ -11,8 +11,8 @@ public enum SolanaCluster {
     DEVNET("https://api.devnet.solana.com", ""),
     GENESYS_GO_MAINNET("https://ssc-dao.genesysgo.net/", "wss://ssc-dao.genesysgo.net/");
 
-    URL endpoint;
-    URI webSocketEndpoint;
+    final URL endpoint;
+    final URI webSocketEndpoint;
 
     SolanaCluster(String url, String ws){
         try {

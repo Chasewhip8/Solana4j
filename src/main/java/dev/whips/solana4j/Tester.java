@@ -39,10 +39,8 @@ public class Tester {
         DynamicRaydiumAMM raydiumAMM = new DynamicRaydiumAMM(solanaAPI, SOL_USDC_AMM_Market);
         raydiumAMM.subscribePrice((price) -> {
             double diff = price - lastPrice;
-            if (Math.abs(diff) > 5) {
-                System.out.printf("Price Updated: " + price + " Change: %f", diff);
-                System.out.println();
-            }
+            System.out.printf("Price Updated: " + price + " Change: %f", diff);
+            System.out.println();
             lastPrice = price;
         });
 

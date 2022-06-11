@@ -7,7 +7,7 @@ public enum RPCCommitment {
     CONFIRMED("confirmed"),
     PROCESSED("processed");
 
-    String commitment;
+    final String commitment;
 
     RPCCommitment(String commitment){
         this.commitment = commitment;

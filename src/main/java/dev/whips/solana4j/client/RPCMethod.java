@@ -64,7 +64,7 @@ public enum RPCMethod {
         WEB_SOCKET_SLOT_SUBSCRIBE("slotSubscribe"),
         WEB_SOCKET_SLOT_UNSUBSCRIBE("slotUnsubscribe");
 
-        String method;
+        final String method;
 
         RPCMethod(String method) {
                 this.method = method;
