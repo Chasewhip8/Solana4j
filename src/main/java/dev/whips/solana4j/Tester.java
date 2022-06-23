@@ -26,7 +26,7 @@ public class Tester {
 
     public static void main(String[] args) throws Exception {
         SolanaAPI solanaAPI = new SolanaAPIBuilder()
-                .setCluster(SolanaCluster.GENESYS_GO_MAINNET)
+                .setCluster(SolanaCluster.MAINNET_BETA)
                 .build();
 
         PubKey wallet = new PubKey("24y6Hi2nUCjAP7Lzxm1kqMjA2UfUMMosKkETxJeqMcWT");
