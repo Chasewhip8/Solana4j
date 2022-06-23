@@ -4,24 +4,31 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Collection;
+import java.util.List;
 
 public class SolanaCluster {
-    public static final SolanaCluster MAINNET_BETA = new SolanaCluster("https://api.mainnet-beta.solana.com", "wss://api.mainnet-beta.solana.com");
-    public static final SolanaCluster TESTNET = new SolanaCluster("https://api.testnet.solana.com", "wss://api.testnet.solana.com");
-    public static final SolanaCluster DEVNET = new SolanaCluster("https://api.devnet.solana.com", "wss://api.devnet.solana.com");
-    public static final SolanaCluster GENESYS_GO_MAINNET = new SolanaCluster("https://ssc-dao.genesysgo.net/", "wss://ssc-dao.genesysgo.net/");
-    public static final SolanaCluster LOCALNET = new SolanaCluster("http://127.0.0.1:8899/", "wss://http://127.0.0.1:8899/");
+    public static final SolanaCluster MAINNET_BETA = new SolanaCluster("mainnet-beta", "https://ssc-dao.genesysgo.net/", "wss://ssc-dao.genesysgo.net/");
+    public static final SolanaCluster TESTNET = new SolanaCluster("testnet", "https://api.testnet.solana.com", "wss://api.testnet.solana.com");
+    public static final SolanaCluster DEVNET = new SolanaCluster("devnet", "https://api.devnet.solana.com", "wss://api.devnet.solana.com");
+    public static final SolanaCluster LOCALNET = new SolanaCluster("localnet", "http://127.0.0.1:8899/", "wss://http://127.0.0.1:8899/");
 
+    private final String name;
     private final URL endpoint;
     private final URI webSocketEndpoint;
 
-    public SolanaCluster(String url, String ws){
+    public SolanaCluster(String name, String url, String ws){
+        this.name = name;
         try {
             this.endpoint = new URL(url);
             this.webSocketEndpoint = new URI(ws);
         } catch (MalformedURLException | URISyntaxException e){
             throw new IllegalArgumentException("Invalid URL for cluster endpoint");
         }
+    }
+
+    public String getName() {
+        return name;
     }
 
     public URL getEndpoint() {
