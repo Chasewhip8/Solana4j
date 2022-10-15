@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class SolanaCluster {
-    public static final SolanaCluster MAINNET_BETA = new SolanaCluster("mainnet-beta", "https://ssc-dao.genesysgo.net/", "wss://ssc-dao.genesysgo.net/");
+    public static final SolanaCluster MAINNET_BETA = new SolanaCluster("mainnet-beta", "https://free.rpcpool.com/", "wss://free.rpcpool.com/");
     public static final SolanaCluster TESTNET = new SolanaCluster("testnet", "https://api.testnet.solana.com", "wss://api.testnet.solana.com");
     public static final SolanaCluster DEVNET = new SolanaCluster("devnet", "https://api.devnet.solana.com", "wss://api.devnet.solana.com");
     public static final SolanaCluster LOCALNET = new SolanaCluster("localnet", "http://127.0.0.1:8899/", "wss://http://127.0.0.1:8899/");
